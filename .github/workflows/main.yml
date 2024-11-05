@@ -28,7 +28,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish -c Release -o out
+        run: dotnet publish -c Release -o workshop_dotnet
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
