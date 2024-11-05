@@ -1,7 +1,7 @@
 name: Deploy .NET Core Web API to Vercel
 
 env:
-  VERCEL_TOKEN: ${{ secrets.DOTNET_VERCEL_TOKEN }}
+  DOTNET_VERCEL_TOKEN: ${{ secrets.DOTNET_VERCEL_TOKEN }}
 
 on:
   push:
@@ -34,4 +34,4 @@ jobs:
         run: npm install --global vercel@latest
 
       - name: Deploy to Vercel
-        run: vercel --prod --token=${{ env.VERCEL_TOKEN }} --confirm --cwd out
+        run: vercel --prod --token=${{ env.DOTNET_VERCEL_TOKEN }} --confirm --cwd workshop_dotnet
