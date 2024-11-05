@@ -1,0 +1,37 @@
+name: Deploy .NET Core Web API to Vercel
+
+env:
+  DOTNET_VERCEL_TOKEN: ${{ secrets.DOTNET_VERCEL_TOKEN }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x' # Specify the .NET Core version you are using
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish -c Release -o workshop_dotnet
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Deploy to Vercel
+        run: vercel --prod --token=${{ env.DOTNET_VERCEL_TOKEN }} --confirm --cwd workshop_dotnet
