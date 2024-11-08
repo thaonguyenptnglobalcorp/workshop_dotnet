@@ -1,37 +1,32 @@
-name: Deploy .NET Core Web API to Vercel
+name: Build
 
-env:
-  DOTNET_VERCEL_TOKEN: ${{ secrets.DOTNET_VERCEL_TOKEN }}
-
-on:
+on: 
   push:
-    branches:
-      - main
+    branches: 
+      - master
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Building image
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v2
+      - name: Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: DockerHub login
+        uses: docker/login-action@v1
         with:
-          dotnet-version: '8.0.x' # Specify the .NET Core version you are using
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Publish
-        run: dotnet publish -c Release -o workshop_dotnet
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Deploy to Vercel
-        run: vercel --prod --token=${{ env.DOTNET_VERCEL_TOKEN }} --confirm --cwd workshop_dotnet
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile 
+          push: true
+          tags: thaonguyenptnglobalcorp/dotnet_workshop:latest
