@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./workshop_dotnet/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: thaonguyenptnglobalcorp/dotnet_workshop:latest
