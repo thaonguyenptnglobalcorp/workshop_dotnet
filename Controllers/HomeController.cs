@@ -14,7 +14,8 @@ namespace workshop_dotnet.Controllers
         [HttpGet("add")]
         public IActionResult Add(int value)
         {
-            var result = value + 1;
+            //Update add by 2
+            var result = value + 2;
             return Ok(result);
         }
 
